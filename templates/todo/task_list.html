@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    TODO list
+    <a href="{% url 'todo:task-create' %}" class="btn btn-primary link-to-page">
+      Add Task
+    </a>
+  </h1>
+
+  {% if task_list %}
+    <table class="w-100">
+      {% for task in task_list %}
+        <tr>
+         <td>
+          <ul style="list-style: none">
+           <li>
+            <b><h5>{{ task.content }}</h5>
+                {% if task.is_done %}
+                  <span class="text-success">Done</span>
+                  {% else %}
+                  <span class="text-danger">Not done</span>
+                {% endif %}
+            </b><br />
+            <span style="font-weight: 500">
+              {{ task.created_datetime }}</span>
+            <span style="color: #ad0a87; font-weight: 500">
+              {% if task.deadline %}
+                {{ task.deadline }}
+                {% else %}
+                  No deadline
+              {% endif %}
+            </span>
+            <br />
+             <span style="font-weight: 500; color: lightslategrey" >Tags:</span>
+              {% for tag in task.tags.all %}
+                <span class="bg-secondary text-white opacity-4">{{ tag.name }}</span>
+              {% endfor %}
+            <br />
+            <a
+              href="{% url 'todo:task-update' pk=task.id %}"
+              style="color: blue;">Update
+            </a>
+            <a
+              href="{% url 'todo:task-delete' pk=task.id %}"
+              style="color: red;">Delete
+            </a>
+            </li>
+            <hr />
+          </ul>
+         </td>
+         <td>
+          <form method="post" action="{% url 'todo:complete-task' pk=task.pk %}">
+            {% csrf_token %}
+            {% if task.is_done %}
+              <input
+                  type="submit"
+                  class="btn btn-sm btn-secondary text-nowrap mt-3 link-to-page"
+                  value="Undo">
+            {% else %}
+              <input
+                  type="submit"
+                  class="btn btn-sm btn-success text-nowrap mt-3 link-to-page"
+                  value="Complete">
+            {% endif %}
+          </form>
+        </td>
+      {% endfor %}
+    </table>
+
+  {% else %}
+    <p>There are no tasks in this list</p>
+  {% endif %}
+{% endblock %}

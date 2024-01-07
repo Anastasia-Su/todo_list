@@ -1,0 +1,12 @@
+body {
+    margin: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.link-to-page {
+    float: right;
+    margin: 0 2px 0 2px;
+}
